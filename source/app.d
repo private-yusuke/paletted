@@ -22,10 +22,20 @@ void main()
 	auto app = new App(600, 450);
 	
 	int time = 0;
-	void fw() { time++; }
-	void fs() { time--; }
-	void fp() {
-		writefln("%s %f %f", time, cos(time / 180.0 * PI), sin(time / 180.0 * PI));
+	void fw(SDL_Event e) {
+		switch(e.key.keysym.sym) {
+			case SDLK_w:
+				time++;
+				break;
+			case SDLK_s:
+				time--;
+				break;
+			case SDLK_p:
+				writefln("%s %f %f", time, cos(time / 180.0 * PI), sin(time / 180.0 * PI));
+				break;
+			default:
+				break;
+		}
 	}
 	const ubyte N = 20;
 	SDL_Color[] colorarr;
@@ -67,9 +77,7 @@ void main()
 		}
 	}
 	app.onUpdate = &update;
-	app.addEvent(Event(SDL_KEYDOWN, SDLK_w, &fw), "press_w");
-	app.addEvent(Event(SDL_KEYDOWN, SDLK_s, &fs), "press_s");
-	app.addEvent(Event(SDL_KEYDOWN, SDLK_p, &fp), "press_p");
+	app.addEvent(Event(SDL_KEYDOWN, &fw), "press_w");
 	// app.removeEvent("q_quit");
 	
 	app.exec();
@@ -77,8 +85,7 @@ void main()
 
 public struct Event {
 	int type;
-	int keycode;
-	void delegate() callfunc;
+	void delegate(SDL_Event) callfunc;
 }
 
 public class App {
@@ -111,7 +118,7 @@ public class App {
 		this.events[name] = e;
 	}
 	void removeEvent(string name) {
-		this.events[name] = Event(-1, -1, null);
+		this.events[name] = Event(-1, null);
 	}
 	string addFont(string path, int size, string label) {
 		writeln(path);
@@ -146,9 +153,7 @@ public class App {
 			currentTick = SDL_GetTicks();
 			SDL_Event e;
 			while(SDL_PollEvent(&e)) {
-				if(e.type == SDL_KEYDOWN) {
-					this.events.values.filter!(i => i.type == SDL_KEYDOWN).filter!(i => i.keycode == e.key.keysym.sym).each!(i => i.callfunc());
-				}
+				this.events.values.filter!(i => i.type == e.type).each!(i => i.callfunc(e));
 				if(e.type == SDL_QUIT) {
 					running = false;
 				}
