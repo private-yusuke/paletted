@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+paletted
+paletted.so
+paletted.dylib
+paletted.dll
+paletted.a
+paletted.lib
+paletted-test-*
+*.exe
+*.o
+*.obj
+*.lst
