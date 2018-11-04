@@ -1,0 +1,9 @@
+{
+	"name": "basic_drawing",
+	"description": "A PaletteD memo",
+	"targetType": "executable",
+	"sourceFiles": ["demo.d"],
+	"dependencies": {
+		"paletted": {"path": "../../"}
+	}
+}

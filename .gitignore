@@ -1,4 +1,5 @@
 .dub
+dub.selections.json
 docs.json
 __dummy.html
 docs/
@@ -7,6 +8,7 @@ paletted_geany
 paletted.so
 paletted.dylib
 paletted.dll
+libpaletted.a
 paletted.a
 paletted.lib
 paletted-test-*
