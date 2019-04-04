@@ -37,6 +37,8 @@ public class App {
 	
 	
 	this(int width = 300, int height = 300) {
+		this.width = width;
+		this.height = height;
 		DerelictSDL2.load();
 		DerelictSDL2ttf.load();
 		SDL_Init(SDL_INIT_VIDEO);
@@ -102,7 +104,7 @@ public class App {
 	void onInterrupt() {
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
-		surfaces.values.writeln;
+		surfaces.values.each!(i => SDL_FreeSurface(i));
 		textures.values.each!(i => SDL_DestroyTexture(i));
 		fonts.values.each!(i => TTF_CloseFont(i));
 		TTF_Quit();
@@ -178,6 +180,9 @@ public class Palette {
 	int drawString(string str, TTF_Font* font, int x, int y) {
 		SDL_Surface* surface = TTF_RenderUTF8_Blended(font, str.toUTFz!(char *), currentColor);
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(app.renderer, surface);
-		return drawTexture(texture, x, y);
+		drawTexture(texture, x, y);
+		SDL_DestroyTexture(texture);
+		SDL_FreeSurface(surface);
+		return 0;
 	}
 }

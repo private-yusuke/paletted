@@ -33,12 +33,12 @@ void main() {
 	}
 	auto rectarr = N.iota.map!(i => SDL_Rect(50+i*10, 50+i*10, 30, 30)).array;
 	auto pointarr = N.iota.map!(i => SDL_Point((sin(i * (PI / 180) * (360 / N)) * 20 + 50).to!int, (cos(i * (PI / 180) * (360 / N)) * 20 + 50).to!int));
-	auto font = app.addFont("/Library/Fonts/Arial.ttf", 100, "Arial");
+	auto font = app.addFont("/Library/Fonts/Arial.ttf", 30, "Arial");
 	font.writeln;
 	
 	auto texture = app.renderString(app.getFont(font), "あhello");
 	void update() {
-		with(app.palette) {
+		/*with(app.palette) {
 			background(128, 0, 128);
 			color(40, 40, 40);
 			point(time/100, 20);
@@ -62,6 +62,18 @@ void main() {
 			fill(60, 30, app.frame%150, 30);
 			fill(30, 60, 30, (app.frame + 75)%150);
 			drawTexture(app.getTexture(texture), 100+time, 200);
+			drawString(app.frame.to!string, app.getFont(font), app.width - 100, 50);
+		}
+		*/
+		with(app.palette) {
+			background(100, 140, 80);
+			foreach(i; 0..10) {
+				ubyte v = (app.currentTick + i * 20) % 256;
+				color(v, v, v);
+				rect(10*i, 10, 10, 10);
+			}
+			color(20, 20, 20);
+			drawString(app.currentTick.to!string, app.getFont(font), app.width - 100, 50);
 		}
 	}
 	app.onUpdate = &update;
